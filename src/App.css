@@ -16,12 +16,12 @@
     height: 200px;
 }
   .formHeader{
-    color: white;
+    color: rgb(226, 226, 226);
     font-size: 50px;
     text-align: center
   }
   .formLabel{
-      color: white;
+      color: rgb(226, 226, 226);
       font-size: 20px;
       margin-top: 10px;
   }

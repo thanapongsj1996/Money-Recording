@@ -9,22 +9,41 @@ class LoginPage extends Component {
       loginPage: true,
       username: '',
       password: '',
-      c_password: ''
+      c_password: '',
+      passwordNotMatch: false
     }
     this.usernameChange = this.usernameChange.bind(this);
     this.passwordChange = this.passwordChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
+    this.c_passwordChange = this.c_passwordChange.bind(this);
+    this.loginSubmit = this.loginSubmit.bind(this);
+    this.registerSubmit = this.registerSubmit.bind(this);
     this.changePage = this.changePage.bind(this)
   }
   usernameChange(event) {
-    this.setState({ username: event.target.value });
+    this.setState({ username: event.target.value, passwordNotMatch: false });
   }
   passwordChange(event) {
-    this.setState({ password: event.target.value });
+    this.setState({ password: event.target.value, passwordNotMatch: false });
   }
-  handleSubmit(event) {
-    alert(`A name was submitted: ${this.state.username} password: ${this.state.password}`);
+  c_passwordChange(event) {
+    this.setState({ c_password: event.target.value, passwordNotMatch: false });
+  }
+  loginSubmit(event) {
+    alert(`A name was submitted: ${this.state.username} password: ${this.state.password} c_password: ${this.state.c_password}`);
     event.preventDefault();
+  }
+  registerSubmit(event) {
+    const { username, password, c_password } = this.state
+    if (username === '' || password === '' || c_password === '') {
+      alert('Please check your details and try again.')
+      event.preventDefault();
+    } else if (password !== c_password) {
+      alert('Password does not match.')
+      event.preventDefault();
+    } else {
+      alert('ok')
+    }
+    
   }
   changePage() {
     this.setState({ loginPage: !this.state.loginPage })
@@ -41,7 +60,7 @@ class LoginPage extends Component {
                 <img className='imgLogin' src='/images/man-user.png' />
               </div>
               <div className="row justify-content-center">
-                <form onSubmit={this.handleSubmit} className='form col-10 col-md-10 col-lg-6' >
+                <form onSubmit={this.loginSubmit} className='form col-10 col-md-10 col-lg-6' >
                   <label className='formLabel'>Username</label>
                   <input className='form-control' onChange={this.usernameChange} />
                   <label className='formLabel'>Password</label>
@@ -59,13 +78,13 @@ class LoginPage extends Component {
                 <img className='imgLogin' src='/images/new-user.png' />
               </div>
               <div className="row justify-content-center">
-                <form onSubmit={this.handleSubmit} className='form col-10 col-md-10 col-lg-6' >
+                <form onSubmit={this.registerSubmit} className='form col-10 col-md-10 col-lg-6' >
                   <label className='formLabel'>Username</label>
                   <input className='form-control' onChange={this.usernameChange} />
                   <label className='formLabel'>Password</label>
                   <input className='form-control' type="password" onChange={this.passwordChange} />
                   <label className='formLabel'>Confirm Password</label>
-                  <input className='form-control' type="password" onChange={this.passwordChange} />
+                  <input className='form-control' type="password" onChange={this.c_passwordChange} />
                   <button className='btn btn-block btn-secondary' style={{ marginTop: 30, fontSize: 22 }} type="submit" value="Submit" >Register</button>
                 </form>
               </div>
