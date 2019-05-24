@@ -9,8 +9,7 @@ class LoginPage extends Component {
       loginPage: true,
       username: '',
       password: '',
-      c_password: '',
-      passwordNotMatch: false
+      c_password: ''
     }
     this.usernameChange = this.usernameChange.bind(this);
     this.passwordChange = this.passwordChange.bind(this);
@@ -20,17 +19,23 @@ class LoginPage extends Component {
     this.changePage = this.changePage.bind(this)
   }
   usernameChange(event) {
-    this.setState({ username: event.target.value, passwordNotMatch: false });
+    this.setState({ username: event.target.value });
   }
   passwordChange(event) {
-    this.setState({ password: event.target.value, passwordNotMatch: false });
+    this.setState({ password: event.target.value });
   }
   c_passwordChange(event) {
-    this.setState({ c_password: event.target.value, passwordNotMatch: false });
+    this.setState({ c_password: event.target.value });
   }
   loginSubmit(event) {
-    alert(`A name was submitted: ${this.state.username} password: ${this.state.password} c_password: ${this.state.c_password}`);
-    event.preventDefault();
+    const { username, password } = this.state
+    if (username === '' || password === '') {
+      alert('Please check your details and try again.')
+      event.preventDefault();
+    } else {
+      alert('ok')
+    }
+
   }
   registerSubmit(event) {
     const { username, password, c_password } = this.state
@@ -43,7 +48,7 @@ class LoginPage extends Component {
     } else {
       alert('ok')
     }
-    
+
   }
   changePage() {
     this.setState({ loginPage: !this.state.loginPage })
