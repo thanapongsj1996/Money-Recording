@@ -7,5 +7,22 @@
     /* Center and scale the image nicely */
     background-position: center;
     background-repeat: no-repeat;
-    background-size: cover;
+    background-size: cover;;
   }
+  
+.imgLogin{
+    margin-top: 100px;
+    width: 200px;
+    height: 200px;
+}
+  .formHeader{
+    color: white;
+    font-size: 50px;
+    text-align: center
+  }
+  .formLabel{
+      color: white;
+      font-size: 20px;
+      margin-top: 10px;
+  }
+
