@@ -49,7 +49,20 @@ function saveNewUser(req, res) {
   })
 }
 
-function checkLogin(req, res){
+function checkLogin(req, res) {
   const { username, password } = req.body
   console.log(req.body)
+  pool.query(`SELECT * FROM users WHERE username='${username}' AND password=sha2('${password}',512)`, (err, result) => {
+    if (result.length > 0) {
+      res.json({
+        success: true,
+        message: 'Login seccess'
+      })
+    } else {
+      res.json({
+        success: false,
+        message: 'Login failed'
+      })
+    }
+  })
 }

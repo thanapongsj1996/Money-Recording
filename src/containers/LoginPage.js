@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Redirect, Link } from 'react-router-dom'
 import axios from 'axios';
 
 
@@ -10,7 +11,8 @@ class LoginPage extends Component {
       loginPage: true,
       username: '',
       password: '',
-      c_password: ''
+      c_password: '',
+      loggedIn: false
     }
     this.usernameChange = this.usernameChange.bind(this);
     this.passwordChange = this.passwordChange.bind(this);
@@ -28,15 +30,27 @@ class LoginPage extends Component {
   c_passwordChange(event) {
     this.setState({ c_password: event.target.value });
   }
-  loginSubmit(event) {
+  async loginSubmit(event) {
     const { username, password } = this.state
     if (username === '' || password === '') {
       alert('Please check your details and try again.')
       event.preventDefault();
     } else {
-      alert('ok')
+      const data = { username, password }
+      axios.post(`http://172.20.10.4:9000/login`, data)
+        .then(async res => {
+          const { success, message } = res.data
+          if (!success) {
+            alert(message)
+            event.preventDefault()
+          } else {
+            alert(message)
+          }
+        })
+        .catch(err => {
+          console.log(err)
+        })
     }
-
   }
   registerSubmit(event) {
     const { username, password, c_password } = this.state

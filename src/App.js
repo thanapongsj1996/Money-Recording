@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom'
 import LoginPage from './containers/LoginPage'
 import NotFound from './containers/NotFound'
+import HomePage from './containers/HomePage'
 
 class App extends Component {
 
@@ -10,6 +11,7 @@ class App extends Component {
     return(
       <Switch>
         <Route exact path='/' component={LoginPage} />
+        <Route exact path='/home' component={HomePage} />
         <Route component={NotFound} />
       </Switch>
     )
