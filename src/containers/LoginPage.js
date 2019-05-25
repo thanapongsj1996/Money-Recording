@@ -50,7 +50,17 @@ class LoginPage extends Component {
       const data = { username, password }
       axios.post(`http://172.20.10.4:9000/register`, data)
         .then(res => {
-          alert(res.data.msg)
+          const { success, message } = res.data
+          if (!success) alert(message)
+          else {
+            alert(message)
+            this.setState({
+              username: '',
+              password: '',
+              c_password: '',
+              loginPage: true
+            })
+          }
         })
         .catch(error => {
           console.log(error)
