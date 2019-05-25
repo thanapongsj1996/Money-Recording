@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import axios from 'axios';
 
 
 class LoginPage extends Component {
@@ -46,7 +47,15 @@ class LoginPage extends Component {
       alert('Password does not match.')
       event.preventDefault();
     } else {
-      alert('ok')
+      const data = { username, password }
+      axios.post(`http://172.20.10.4:9000/register`, data)
+        .then(res => {
+          alert(res.data.msg)
+        })
+        .catch(error => {
+          console.log(error)
+        })
+      event.preventDefault();
     }
 
   }
@@ -62,7 +71,7 @@ class LoginPage extends Component {
             this.state.loginPage &&
             <div>
               <div className='row justify-content-center'>
-                <img className='imgLogin' src='/images/man-user.png' />
+                <img className='imgLogin' src='/images/man-user.png' alt='' />
               </div>
               <div className="row justify-content-center">
                 <form onSubmit={this.loginSubmit} className='form col-10 col-md-10 col-lg-6' >
@@ -80,7 +89,7 @@ class LoginPage extends Component {
             !this.state.loginPage &&
             <div>
               <div className='row justify-content-center'>
-                <img className='imgLogin' src='/images/new-user.png' />
+                <img className='imgLogin' src='/images/new-user.png' alt='' />
               </div>
               <div className="row justify-content-center">
                 <form onSubmit={this.registerSubmit} className='form col-10 col-md-10 col-lg-6' >
