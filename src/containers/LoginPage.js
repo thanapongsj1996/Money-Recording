@@ -21,30 +21,31 @@ class LoginPage extends Component {
     this.registerSubmit = this.registerSubmit.bind(this);
     this.changePage = this.changePage.bind(this)
   }
-  usernameChange(event) {
-    this.setState({ username: event.target.value });
+  async usernameChange(event) {
+    await this.setState({ username: event.target.value });
   }
-  passwordChange(event) {
-    this.setState({ password: event.target.value });
+  async passwordChange(event) {
+    await this.setState({ password: event.target.value });
   }
-  c_passwordChange(event) {
-    this.setState({ c_password: event.target.value });
+  async c_passwordChange(event) {
+    await this.setState({ c_password: event.target.value });
   }
   async loginSubmit(event) {
+    event.preventDefault()
     const { username, password } = this.state
     if (username === '' || password === '') {
       alert('Please check your details and try again.')
       event.preventDefault();
     } else {
       const data = { username, password }
-      axios.post(`http://172.20.10.4:9000/login`, data)
+      axios.post(`http://192.168.1.118:9000/login`, data)
         .then(async res => {
-          const { success, message } = res.data
+          const { success, message, profile } = res.data
           if (!success) {
-            alert(message)
-            event.preventDefault()
-          } else {
-            alert(message)
+            await alert(message)
+          } else if (success) {
+            localStorage.setItem('profile', profile)
+            this.setState({ loggedIn: true })
           }
         })
         .catch(err => {
@@ -52,22 +53,21 @@ class LoginPage extends Component {
         })
     }
   }
-  registerSubmit(event) {
+  async registerSubmit(event) {
+    event.preventDefault()
     const { username, password, c_password } = this.state
     if (username === '' || password === '' || c_password === '') {
       alert('Please check your details and try again.')
-      event.preventDefault();
     } else if (password !== c_password) {
       alert('Password does not match.')
-      event.preventDefault();
     } else {
       const data = { username, password }
-      axios.post(`http://172.20.10.4:9000/register`, data)
-        .then(res => {
+      axios.post(`http://192.168.1.118:9000/register`, data)
+        .then(async res => {
           const { success, message } = res.data
-          if (!success) alert(message)
+          if (!success) await alert(message)
           else {
-            alert(message)
+            await alert(message)
             this.setState({
               username: '',
               password: '',
@@ -79,7 +79,6 @@ class LoginPage extends Component {
         .catch(error => {
           console.log(error)
         })
-      event.preventDefault();
     }
 
   }
@@ -88,6 +87,10 @@ class LoginPage extends Component {
   }
 
   render() {
+    const { loggedIn } = this.state;
+    if (loggedIn) {
+      return <Redirect to='/home' />
+    }
     return (
       <div className="bgLoginPage">
         <div className="container">
