@@ -25,4 +25,10 @@
       font-size: 20px;
       margin-top: 10px;
   }
+  .addIncomeBtn{
+    float: right;
+    font-size: 15px;
+    width: 150px;
+    margin: 10px;
+  }
 

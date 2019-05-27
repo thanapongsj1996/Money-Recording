@@ -19,6 +19,7 @@ app.get('/', function (req, res) {
 });
 app.post('/register', saveNewUser)
 app.post('/login', checkLogin)
+app.get('/home', showData)
 
 
 
@@ -64,6 +65,23 @@ function checkLogin(req, res) {
       res.json({
         success: false,
         message: 'Login failed'
+      })
+    }
+  })
+}
+
+function showData(req, res) {
+  const username = req.query.username
+  console.log(username)
+  pool.query(`SELECT transactions.remark, transactions.amount, transactions.date, transactions.type FROM transactions JOIN users ON transactions.userid=users.id WHERE username='${username}'`, (err, result) => {
+    if (err) {
+      res.json({
+        success: false,
+        message: 'Query failed'
+      })
+    } else {
+      res.json({
+        results: result
       })
     }
   })
