@@ -4,6 +4,8 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom'
 import LoginPage from './containers/LoginPage'
 import NotFound from './containers/NotFound'
 import HomePage from './containers/HomePage'
+import AddIncomePage from './containers/AddIncomePage'
+import AddExpensePage from './containers/AddExpensePage'
 
 class App extends Component {
 
@@ -12,6 +14,8 @@ class App extends Component {
       <Switch>
         <Route exact path='/' component={LoginPage} />
         <Route exact path='/home' component={HomePage} />
+        <Route exact path='/add/income' component={AddIncomePage} />
+        <Route exact path='/add/expense' component={AddExpensePage} />
         <Route component={NotFound} />
       </Switch>
     )

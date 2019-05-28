@@ -40,10 +40,11 @@ class LoginPage extends Component {
       const data = { username, password }
       axios.post(`http://172.20.10.4:9000/login`, data)
         .then(async res => {
-          const { success, message, profile } = res.data
+          const { success, message, userid, profile } = res.data
           if (!success) {
             await alert(message)
           } else if (success) {
+            localStorage.setItem('userid', userid)
             localStorage.setItem('profile', profile)
             this.setState({ loggedIn: true })
           }

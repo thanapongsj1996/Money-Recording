@@ -15,6 +15,11 @@
     width: 200px;
     height: 200px;
 }
+.imgAdd{
+  margin-top: 50px;
+  width: 200px;
+  height: 200px;
+}
   .formHeader{
     color: rgb(226, 226, 226);
     font-size: 50px;
@@ -25,8 +30,15 @@
       font-size: 20px;
       margin-top: 10px;
   }
+  .formAdd{
+    color: rgb(rgb(59, 59, 59), green, blue);
+    font-size: 20px;
+    margin-top: 10px;
+}
   .logoutBtn{
-    font-size: 5px;
+    font-size: 15px;
+    width: 150px;
+    margin: 10px;
   }
   .addBtn{
     float: right;
@@ -34,4 +46,6 @@
     width: 150px;
     margin: 10px;
   }
-
+.btn:hover{
+  text-decoration: none;
+}
