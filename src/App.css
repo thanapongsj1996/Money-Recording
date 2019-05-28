@@ -25,7 +25,10 @@
       font-size: 20px;
       margin-top: 10px;
   }
-  .addIncomeBtn{
+  .logoutBtn{
+    font-size: 5px;
+  }
+  .addBtn{
     float: right;
     font-size: 15px;
     width: 150px;

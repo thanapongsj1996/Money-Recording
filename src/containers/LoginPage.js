@@ -38,7 +38,7 @@ class LoginPage extends Component {
       event.preventDefault();
     } else {
       const data = { username, password }
-      axios.post(`http://192.168.1.118:9000/login`, data)
+      axios.post(`http://172.20.10.4:9000/login`, data)
         .then(async res => {
           const { success, message, profile } = res.data
           if (!success) {
@@ -62,7 +62,7 @@ class LoginPage extends Component {
       alert('Password does not match.')
     } else {
       const data = { username, password }
-      axios.post(`http://192.168.1.118:9000/register`, data)
+      axios.post(`http://172.20.10.4:9000/register`, data)
         .then(async res => {
           const { success, message } = res.data
           if (!success) await alert(message)
