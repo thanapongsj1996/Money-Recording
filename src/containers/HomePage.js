@@ -53,7 +53,6 @@ class HomePage extends Component {
     }
 
     deleteData(id) {
-
         var cf = window.confirm('Do you want to delete this transaction?')
         if (cf) {
             const data = { id: id }
@@ -84,8 +83,8 @@ class HomePage extends Component {
                         <td>{data.type}</td>
                         <td>{data.date}</td>
                         <td>
-                            <Link to={{ pathname: `/edit/${this.state.profile}/${data.id}` }}><button>a</button></Link>
-                            <button onClick={this.deleteData.bind(this, data.id)}>b</button>
+                            <Link to={{ pathname: `/edit/${this.state.profile}/${data.id}` }}><button className='btn btn-secondary mx-1 px-2 py-1'><i class="fas fa-edit" /></button></Link>
+                            <button className='btn btn-danger mx-1 px-2 py-1' onClick={this.deleteData.bind(this, data.id)}><i class="fas fa-trash" /></button>
                         </td>
                     </tr>
                 )

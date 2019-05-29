@@ -149,7 +149,7 @@ function updateData(req, res) {
 }
 
 function deleteData(req, res) {
-  // const { id } = req.body
+  const { id } = req.body
   pool.query(`DELETE FROM transactions WHERE id='${id}'`,(err,result)=>{
     if (err) {
       res.json({
