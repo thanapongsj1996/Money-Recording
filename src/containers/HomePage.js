@@ -16,7 +16,8 @@ class HomePage extends Component {
         }
         this.feed()
         this.logOut = this.logOut.bind(this)
-        this.handleChange = this.handleChange.bind(this);
+        this.selectDate = this.selectDate.bind(this);
+        this.deleteData = this.deleteData.bind(this)
     }
 
     async feed() {
@@ -43,11 +44,33 @@ class HomePage extends Component {
                 console.log(err)
             })
     }
-    handleChange(date) {
+
+    selectDate(date) {
         this.setState({
             pickDate: date
         });
         this.feed()
+    }
+
+    deleteData(id) {
+
+        var cf = window.confirm('Do you want to delete this transaction?')
+        if (cf) {
+            const data = { id: id }
+            axios.post(`http://172.20.10.4:9000/delete`, data)
+                .then(res => {
+                    const { success } = res.data
+                    if (!success) {
+                        alert('Fail')
+                    } else if (success) {
+                        window.location.pathname = '/home'
+                    }
+                })
+                .catch(err => {
+                    console.log(err)
+                })
+        }
+
     }
 
     showTable() {
@@ -62,7 +85,7 @@ class HomePage extends Component {
                         <td>{data.date}</td>
                         <td>
                             <Link to={{ pathname: `/edit/${this.state.profile}/${data.id}` }}><button>a</button></Link>
-                            <button>b</button>
+                            <button onClick={this.deleteData.bind(this, data.id)}>b</button>
                         </td>
                     </tr>
                 )
@@ -96,7 +119,7 @@ class HomePage extends Component {
                     <div className='datepickerHome'>
                         <DatePicker
                             selected={this.state.pickDate}
-                            onChange={this.handleChange}
+                            onChange={this.selectDate}
                             maxDate={addDays(new Date(), 0)}
                         />
                     </div>
