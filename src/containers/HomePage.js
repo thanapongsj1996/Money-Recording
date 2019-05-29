@@ -51,7 +51,6 @@ class HomePage extends Component {
     }
 
     showTable() {
-        const userid = localStorage.getItem('userid')
         if (this.state.data) {
             return this.state.data.map((data, index) =>
                 (
@@ -62,7 +61,7 @@ class HomePage extends Component {
                         <td>{data.type}</td>
                         <td>{data.date}</td>
                         <td>
-                            <Link to={{ pathname: `/edit/${userid}/${data.id}` }}><button>a</button></Link>
+                            <Link to={{ pathname: `/edit/${this.state.profile}/${data.id}` }}><button>a</button></Link>
                             <button>b</button>
                         </td>
                     </tr>

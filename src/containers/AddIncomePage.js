@@ -58,7 +58,7 @@ class AddIncomePage extends Component {
                         <label className='formAdd'>Remark</label>
                         <textarea className='form-control' type='text' style={{ height: 120 }} onChange={this.remarkChange} />
                         <button className='btn btn-block btn-secondary' style={{ marginTop: 30, fontSize: 22 }} type="submit" value="Submit" >Add Income</button>
-                        <Link to='../home' style={{ textDecoration: 'none' }}><button className='btn btn-block btn-danger' style={{ marginTop: 10, fontSize: 22 }} >Cancel</button></Link>
+                        <Link to='/home' style={{ textDecoration: 'none' }}><button className='btn btn-block btn-danger' style={{ marginTop: 10, fontSize: 22 }} >Cancel</button></Link>
                     </form>
                 </div>
             </div>

@@ -21,6 +21,8 @@ app.post('/register', saveNewUser)
 app.post('/login', checkLogin)
 app.get('/home', showData)
 app.post('/add', addTransaction)
+app.get('/edit', showEditData)
+app.post('/edit', updateData)
 
 
 
@@ -73,9 +75,25 @@ function checkLogin(req, res) {
 }
 
 function showData(req, res) {
-  const {username,date} = req.query
-  console.log(date)
+  const { username, date } = req.query
   pool.query(`SELECT transactions.id,transactions.userid, transactions.remark, transactions.amount, transactions.date, transactions.type FROM transactions JOIN users ON transactions.userid=users.id WHERE username='${username}' AND transactions.date='${date}'`, (err, result) => {
+    if (err) {
+      res.json({
+        success: false,
+        message: 'Query failed'
+      })
+    } else {
+      res.json({
+        results: result
+      })
+    }
+  })
+}
+
+function showEditData(req, res) {
+  const { username, id } = req.query
+  console.log(req.query)
+  pool.query(`SELECT transactions.amount, transactions.remark, transactions.userid FROM transactions JOIN users ON transactions.userid=users.id WHERE users.username='${username}' AND transactions.id='${id}'`, (err, result) => {
     if (err) {
       res.json({
         success: false,
@@ -100,6 +118,23 @@ function addTransaction(req, res) {
   console.log(nowDate)
   pool.query(`INSERT INTO transactions (userid, amount, type, remark, date) VALUES ('${userid}','${amount}','${type}','${remark}','${nowDate}')`, (err, result) => {
     if (err) {
+      res.json({
+        success: false,
+        message: err.message
+      })
+    } else {
+      res.json({
+        success: true
+      })
+    }
+  })
+}
+
+function updateData(req, res){
+  console.log(req.body)
+  const {amount, remark, id} = req.body
+  pool.query(`UPDATE transactions SET amount='${amount}', remark='${remark}' WHERE id='${id}'`,(err,result)=>{
+    if(err){
       res.json({
         success: false,
         message: err.message
