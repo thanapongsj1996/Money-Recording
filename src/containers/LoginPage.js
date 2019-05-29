@@ -90,7 +90,7 @@ class LoginPage extends Component {
   render() {
     const { loggedIn } = this.state;
     if (loggedIn) {
-      return <Redirect to='/home' />
+      return <Redirect to='home' />
     }
     return (
       <div className="bgLoginPage">

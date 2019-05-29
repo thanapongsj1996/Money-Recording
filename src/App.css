@@ -40,6 +40,15 @@
     width: 150px;
     margin: 10px;
   }
+  .datepickerHome{
+    float: right;
+    font-size: 20px;
+    margin: 10px;
+  }
+  .datepickerAdd{
+    font-size: 20px;
+    margin: 10px;
+  }
   .addBtn{
     float: right;
     font-size: 15px;

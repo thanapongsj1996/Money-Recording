@@ -1,16 +1,45 @@
 import React, { Component } from 'react'
 import { Redirect, Link } from 'react-router-dom'
+import axios from 'axios'
 
-class AddExpenxePage extends Component {
+class AddExpensePage extends Component {
 
     constructor(props) {
         super(props)
         this.state = {
-
+            amount: '',
+            remark: ''
         }
-
+        this.amountChange = this.amountChange.bind(this);
+        this.remarkChange = this.remarkChange.bind(this);
+        this.expenseSubmit = this.expenseSubmit.bind(this);
     }
-
+    async amountChange(event) {
+        await this.setState({ amount: event.target.value });
+    }
+    async remarkChange(event) {
+        await this.setState({ remark: event.target.value });
+    }
+    async expenseSubmit(event) {
+        event.preventDefault()
+        const { amount, remark } = this.state
+        const userid = localStorage.getItem('userid')
+        if (amount === '' || remark === '') {
+            alert('Please check your details and try again.')
+            event.preventDefault();
+        } else {
+            const data = { amount, remark, userid, type: 'expense' }
+            axios.post(`http://172.20.10.4:9000/add`, data)
+                .then(res => {
+                    if (res.data.success) {
+                        window.location.pathname = '/home'
+                    }
+                })
+                .catch(err => {
+                    console.log(err)
+                })
+        }
+    }
     render() {
 
         const profile = localStorage.getItem('profile')
@@ -23,11 +52,11 @@ class AddExpenxePage extends Component {
                     <img className='imgAdd' src='/images/expense.png' alt='' />
                 </div>
                 <div className="row justify-content-center">
-                    <form onSubmit={this.registerSubmit} className='form col-10 col-md-10 col-lg-6' >
-                        <label className='formAdd'>Amount</label>
-                        <input className='form-control' />
+                    <form onSubmit={this.expenseSubmit} className='form col-10 col-md-10 col-lg-6' >
+                        <label className='formAdd'>Amount(Baht)</label>
+                        <input className='form-control' type='number' onChange={this.amountChange} />
                         <label className='formAdd'>Remark</label>
-                        <textarea className='form-control' style={{height:120}} />
+                        <textarea className='form-control' type='text' style={{ height: 120 }} onChange={this.remarkChange} />
                         <button className='btn btn-block btn-secondary' style={{ marginTop: 30, fontSize: 22 }} type="submit" value="Submit" >Add Expense</button>
                         <Link to='/home' style={{ textDecoration: 'none' }}><button className='btn btn-block btn-danger' style={{ marginTop: 10, fontSize: 22 }} >Cancel</button></Link>
                     </form>
@@ -38,4 +67,4 @@ class AddExpenxePage extends Component {
 
 
 }
-export default AddExpenxePage
+export default AddExpensePage

@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import { Redirect, Link } from 'react-router-dom'
 import axios from 'axios'
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import addDays from "date-fns/addDays";
 
 class HomePage extends Component {
 
@@ -8,68 +11,64 @@ class HomePage extends Component {
         super(props)
         this.state = {
             profile: '',
-            pageType: 'income',
-            incomeData: null,
-            expenseData: null
+            data: null,
+            pickDate: new Date()
         }
         this.feed()
         this.logOut = this.logOut.bind(this)
-        // this.show=this.show.bind(this)
+        this.handleChange = this.handleChange.bind(this);
     }
 
     async feed() {
         const profile = await localStorage.getItem('profile')
-        var incomeData = []
-        var expenseData = []
         this.setState({ profile: profile })
-        axios.get(`http://172.20.10.4:9000/home`, { params: { username: profile } })
+        var d = this.state.pickDate.getDate()
+        var m = this.state.pickDate.getMonth() + 1
+        var y = this.state.pickDate.getFullYear()
+        var date = y + '-' + m + '-' + d
+        console.log(date)
+        axios.get(`http://172.20.10.4:9000/home`, { params: { username: profile, date: date } })
             .then(async res => {
                 const data = res.data.results
                 for (var i in data) {
-                    if (data[i].type === 'income') incomeData.push(data[i])
-                    else if (data[i].type === 'expense') expenseData.push(data[i])
+                    var n_date = new Date(data[i].date)
+                    data[i].date = n_date.toDateString()
                 }
                 this.setState({
                     loggedIn: true,
-                    incomeData: incomeData,
-                    expenseData: expenseData
+                    data: data
                 })
             })
             .catch(err => {
                 console.log(err)
             })
     }
-
-    showIncomeinTable() {
-        if (this.state.incomeData) {
-            return this.state.incomeData.map((data, index) => (
-                <tr key={index}>
-                    <th scope="row">{index + 1}</th>
-                    <td>{data.remark}</td>
-                    <td>{data.amount}</td>
-                    <td>{data.date}</td>
-                    <td><button>a</button><button>b</button></td>
-                </tr>
-            ))
-        }
+    handleChange(date) {
+        this.setState({
+            pickDate: date
+        });
+        this.feed()
     }
 
-    showExpenseinTable() {
-        if (this.state.expenseData) {
-            return this.state.expenseData.map((data, index) => (
-                <tr key={index}>
-                    <th scope="row">{index + 1}</th>
-                    <td>{data.remark}</td>
-                    <td>{data.amount}</td>
-                    <td>{data.date}</td>
-                    <td><button>a</button><button>b</button></td>
-                </tr>
-            ))
+    showTable() {
+        const userid = localStorage.getItem('userid')
+        if (this.state.data) {
+            return this.state.data.map((data, index) =>
+                (
+                    <tr key={index}>
+                        <th scope="row">{index + 1}</th>
+                        <td>{data.remark}</td>
+                        <td>{data.amount}</td>
+                        <td>{data.type}</td>
+                        <td>{data.date}</td>
+                        <td>
+                            <Link to={{ pathname: `/edit/${userid}/${data.id}` }}><button>a</button></Link>
+                            <button>b</button>
+                        </td>
+                    </tr>
+                )
+            )
         }
-    }
-
-    selectPageType(type) {
-        this.setState({ pageType: type })
     }
 
     logOut() {
@@ -90,35 +89,31 @@ class HomePage extends Component {
                         <h1 className="display-4">Money Record</h1>
                         <h3>Username : {this.state.profile}</h3>
                     </div>
-                    <div className="mt-4 form-group container col-10 offset-1 col-sm-8 offset-sm-2 col-md-6 offset-md-3 col-lg-4 offset-lg-4">
-                        <select className="form-control" onChange={(event) => this.selectPageType(event.target.value)}>
-                            <option value='income'>Income</option>
-                            <option value='expense'>Expense</option>
-                        </select>
-                    </div>
                 </div>
                 <div className='container'>
                     <button className='btn btn-danger logoutBtn' onClick={this.logOut} >Exit</button>
-                    
-                    {this.state.pageType === 'income' &&
-                       <Link to='/add/income' style={{ textDecoration: 'none' }}><button className='btn btn-info addBtn' >Add Income</button></Link> 
-                    }
-                    {this.state.pageType === 'expense' &&
-                        <Link to='/add/expense' style={{ textDecoration: 'none' }}><button className='btn btn-info addBtn' >Add Expense</button></Link>
-                    }
+                    <Link to='/add/expense' style={{ textDecoration: 'none' }}><button className='btn btn-info addBtn' >Add Expense</button></Link>
+                    <Link to='/add/income' style={{ textDecoration: 'none' }}><button className='btn btn-info addBtn' >Add Income</button></Link>
+                    <div className='datepickerHome'>
+                        <DatePicker
+                            selected={this.state.pickDate}
+                            onChange={this.handleChange}
+                            maxDate={addDays(new Date(), 0)}
+                        />
+                    </div>
                     <table className="table">
-                        <thead>
+                        <thead className='thead-light'>
                             <tr>
                                 <th scope="col">#</th>
                                 <th scope="col">Remark</th>
-                                <th scope="col">Amount</th>
+                                <th scope="col">Amount(Baht)</th>
+                                <th scope="col">Type</th>
                                 <th scope="col">Date</th>
                                 <th scope="col"></th>
                             </tr>
                         </thead>
                         <tbody>
-                            {this.state.pageType === 'income' && this.showIncomeinTable()}
-                            {this.state.pageType === 'expense' && this.showExpenseinTable()}
+                            {this.showTable()}
                         </tbody>
                     </table>
                 </div>

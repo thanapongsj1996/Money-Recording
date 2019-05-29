@@ -7,7 +7,7 @@ class AddIncomePage extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            amount: 0,
+            amount: '',
             remark: ''
         }
         this.amountChange = this.amountChange.bind(this);
@@ -28,9 +28,13 @@ class AddIncomePage extends Component {
             alert('Please check your details and try again.')
             event.preventDefault();
         } else {
-            const data = { amount, remark, userid }
-            axios.post(`http://172.20.10.4:9000/addincome`, data)
-                .then()
+            const data = { amount, remark, userid, type: 'income' }
+            axios.post(`http://172.20.10.4:9000/add`, data)
+                .then(res => {
+                    if (res.data.success) {
+                        window.location.pathname = '/home'
+                    }
+                })
                 .catch(err => {
                     console.log(err)
                 })
@@ -49,12 +53,12 @@ class AddIncomePage extends Component {
                 </div>
                 <div className="row justify-content-center">
                     <form onSubmit={this.incomeSubmit} className='form col-10 col-md-10 col-lg-6' >
-                        <label className='formAdd'>Amount</label>
+                        <label className='formAdd'>Amount(Baht)</label>
                         <input className='form-control' type='number' onChange={this.amountChange} />
                         <label className='formAdd'>Remark</label>
                         <textarea className='form-control' type='text' style={{ height: 120 }} onChange={this.remarkChange} />
                         <button className='btn btn-block btn-secondary' style={{ marginTop: 30, fontSize: 22 }} type="submit" value="Submit" >Add Income</button>
-                        <Link to='/home' style={{ textDecoration: 'none' }}><button className='btn btn-block btn-danger' style={{ marginTop: 10, fontSize: 22 }} >Cancel</button></Link>
+                        <Link to='../home' style={{ textDecoration: 'none' }}><button className='btn btn-block btn-danger' style={{ marginTop: 10, fontSize: 22 }} >Cancel</button></Link>
                     </form>
                 </div>
             </div>

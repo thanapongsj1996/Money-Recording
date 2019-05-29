@@ -20,7 +20,7 @@ app.get('/', function (req, res) {
 app.post('/register', saveNewUser)
 app.post('/login', checkLogin)
 app.get('/home', showData)
-app.post('/addincome', addIncome)
+app.post('/add', addTransaction)
 
 
 
@@ -73,9 +73,9 @@ function checkLogin(req, res) {
 }
 
 function showData(req, res) {
-  const username = req.query.username
-  console.log(username)
-  pool.query(`SELECT transactions.id, transactions.remark, transactions.amount, transactions.date, transactions.type FROM transactions JOIN users ON transactions.userid=users.id WHERE username='${username}'`, (err, result) => {
+  const {username,date} = req.query
+  console.log(date)
+  pool.query(`SELECT transactions.id,transactions.userid, transactions.remark, transactions.amount, transactions.date, transactions.type FROM transactions JOIN users ON transactions.userid=users.id WHERE username='${username}' AND transactions.date='${date}'`, (err, result) => {
     if (err) {
       res.json({
         success: false,
@@ -89,12 +89,16 @@ function showData(req, res) {
   })
 }
 
-function addIncome(req, res){
+function addTransaction(req, res) {
   console.log(req.body)
-  const {userid, remark, amount } = req.body
-  const nowDate = new Date()
+  const { userid, remark, amount, type } = req.body
+  var date = new Date()
+  var day = date.getDate()
+  var month = date.getMonth() + 1
+  var year = date.getFullYear()
+  var nowDate = year + '-' + month + '-' + day
   console.log(nowDate)
-  pool.query(`INSERT INTO transactions (userid, amount, type, remark, date) VALUES ('${userid}','${amount}','income','${remark}','2019-06-03')`,(err, result)=>{
+  pool.query(`INSERT INTO transactions (userid, amount, type, remark, date) VALUES ('${userid}','${amount}','${type}','${remark}','${nowDate}')`, (err, result) => {
     if (err) {
       res.json({
         success: false,
